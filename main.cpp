@@ -2,10 +2,6 @@
 
 #include "cond_check.hpp"
 
-//some aliases to make reasoning about what happens a little easier
-using True = Boolean<true>;
-using False = Boolean<false>;
-
 //some condition of interest that depends on T and can depend on other args
 //(here X, but more Y, Z, ,,, would be possible in the general case
 template <typename T, typename X>
@@ -14,9 +10,9 @@ using IntegralAndNotX = Boolean<
     !std::is_same<T, X>::value>;
 
 template <typename T>
-using Cond = IntegralAndNotX<T, bool>;
+using MyCond = IntegralAndNotX<T, bool>;
 
-template <typename T, typename Cond = Cond<T>>
+template <typename T, typename Cond = MyCond<T>>
 struct DependsOnCond
 {
     static void print()
@@ -62,8 +58,8 @@ int main(int argc, char **argv)
     result = Eval<False>::value();
     std::cout << result << " " << Eval<False>::type() << std::endl;
 
-    result = Eval<Cond<int>>::value();
-    std::cout << result << " " << Eval<Cond<int>>::type() << std::endl;
+    result = Eval<MyCond<int>>::value();
+    std::cout << result << " " << Eval<MyCond<int>>::type() << std::endl;
 
     DependsOnCond<int>::print();
     DependsOnCond<bool>::print();
