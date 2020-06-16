@@ -2,15 +2,18 @@
 
 #include <type_traits>
 
+//some helper aliases/templates to make reasoning about what happens a little easier
 template <bool Value = true>
 using Boolean = std::integral_constant<bool, Value>;
 
 using TrueType = Boolean<true>::type;
 using FalseType = Boolean<false>::type;
 
-//some aliases to make reasoning about what happens a little easier
 using True = Boolean<true>;
 using False = Boolean<false>;
+
+template <typename Cond>
+using TrueOrFail = typename std::enable_if<Cond::value, True>::type;
 
 //can evaluate the condition into its bool value and a type
 //Cond is expected to be Boolean, otherwise weird things may happen...

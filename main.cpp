@@ -45,6 +45,16 @@ struct DependsOnCond<T, False>
     //add whatever is needed in the negative case
 };
 
+template <typename T, typename Cond = TrueOrFail<MyCond<T>>>
+struct DoesNotCompileIfCondIsFalse
+{
+    static void print()
+    {
+        std::cout << "default - true" << std::endl;
+    }
+    //the false instantiation should lead to a compiler error
+};
+
 struct Foo
 {
 };
@@ -65,6 +75,12 @@ int main(int argc, char **argv)
     DependsOnCond<bool>::print();
     DependsOnCond<double>::print();
     DependsOnCond<Foo>::print();
+
+    //condition is true ... ok
+    DoesNotCompileIfCondIsFalse<int>::print();
+
+    //condition is false ... this does not compile, as intended
+    //DoesNotCompileIfCondIsFalse<bool>::print();
 
     return 0;
 }
