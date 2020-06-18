@@ -6,9 +6,6 @@
 template <bool Value = true>
 using Boolean = std::integral_constant<bool, Value>;
 
-using TrueType = Boolean<true>::type;
-using FalseType = Boolean<false>::type;
-
 using True = Boolean<true>;
 using False = Boolean<false>;
 
@@ -20,16 +17,16 @@ using TrueOrFail = typename std::enable_if<Cond::value, True>::type;
 template <typename Cond>
 struct Eval
 {
-    static_assert(std::is_same<Cond, TrueType>::value || std::is_same<Cond, FalseType>::value);
+    static_assert(std::is_same<Cond, True>::value || std::is_same<Cond, False>::value);
 
     template <typename U = Cond>
-    static constexpr bool value(typename std::enable_if<std::is_same<U, TrueType>::value, void *>::type = nullptr)
+    static constexpr bool value(typename std::enable_if<std::is_same<U, True>::value, void *>::type = nullptr)
     {
         return std::true_type::value;
     }
 
     template <typename U = Cond>
-    static constexpr bool value(typename std::enable_if<std::is_same<U, FalseType>::value, void *>::type = nullptr)
+    static constexpr bool value(typename std::enable_if<std::is_same<U, False>::value, void *>::type = nullptr)
     {
         return std::false_type::value;
     }
